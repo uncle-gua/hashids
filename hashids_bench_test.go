@@ -3,11 +3,11 @@ package hashids_test
 import (
 	"testing"
 
-	"github.com/indrasaputra/hashids"
+	"github.com/uncle-gua/hashids"
 )
 
 const (
-	salt = "common-salt"
+	salt = "!Woo!Too-Salty~"
 )
 
 func BenchmarkID_MarshalJSON(b *testing.B) {

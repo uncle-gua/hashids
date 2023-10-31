@@ -36,7 +36,7 @@ func EncodeID(id ID) ([]byte, error) {
 // Using this type allows the int64 to be obfuscated
 // into a random string using the Hashids algorithm.
 // Read more about hashids in https://hashids.org/.
-type ID int64
+type ID uint64
 
 // MarshalJSON marshals the ID to JSON.
 func (id ID) MarshalJSON() ([]byte, error) {

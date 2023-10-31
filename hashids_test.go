@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/indrasaputra/hashids"
 	"github.com/stretchr/testify/assert"
+	"github.com/uncle-gua/hashids"
 )
 
 func TestID_MarshalJSON(t *testing.T) {
@@ -15,21 +15,6 @@ func TestID_MarshalJSON(t *testing.T) {
 
 		assert.Nil(t, err)
 		assert.Equal(t, "null", string(res))
-	})
-
-	t.Run("negative number can't be marshalled", func(t *testing.T) {
-		ids := []hashids.ID{
-			hashids.ID(-1),
-			hashids.ID(-43),
-			hashids.ID(-66),
-		}
-
-		for _, id := range ids {
-			res, err := id.MarshalJSON()
-
-			assert.NotNil(t, err)
-			assert.Nil(t, res)
-		}
 	})
 
 	t.Run("successfully marshal positive number", func(t *testing.T) {
@@ -135,20 +120,6 @@ func TestID_MarshalAndUnmarshal(t *testing.T) {
 }
 
 func TestID_EncodeString(t *testing.T) {
-	t.Run("negative number can't be encoded and produces empty string", func(t *testing.T) {
-		ids := []hashids.ID{
-			hashids.ID(-1),
-			hashids.ID(-43),
-			hashids.ID(-66),
-		}
-
-		for _, id := range ids {
-			res := id.EncodeString()
-
-			assert.Empty(t, res)
-		}
-	})
-
 	t.Run("successfully encode positive number", func(t *testing.T) {
 		tables := []struct {
 			hash string
@@ -191,28 +162,6 @@ func TestNewHashID(t *testing.T) {
 }
 
 func TestHashID_Encode(t *testing.T) {
-	t.Run("negative integers can't be encoded", func(t *testing.T) {
-		tables := []struct {
-			minLength uint
-			salt      string
-			id        hashids.ID
-		}{
-			{0, "salt", -1},
-			{1, "one-salt", -10},
-			{2, "]1=-3asc", -7},
-			{3, "~!/..&%%!(#", -193013},
-			{4, "|=\\//f35022fj!^@*H((&&#", -323652},
-		}
-
-		for _, table := range tables {
-			hash, _ := hashids.NewHashID(table.minLength, table.salt)
-			res, err := hash.Encode(table.id)
-
-			assert.NotNil(t, err)
-			assert.Nil(t, res)
-		}
-	})
-
 	t.Run("successfully encodes uint64 into a slice of byte length at least the same as minimal length", func(t *testing.T) {
 		tables := []struct {
 			minLength uint
@@ -287,17 +236,6 @@ func TestHashID_Decode(t *testing.T) {
 }
 
 func TestEncodeID(t *testing.T) {
-	t.Run("negative ID can't be encoded", func(t *testing.T) {
-		ids := []hashids.ID{-1, -2, -3, -4, -5, -6, -7, -8, -9, -10}
-		for _, id := range ids {
-			res, err := hashids.EncodeID(id)
-
-			assert.NotNil(t, err)
-			assert.Empty(t, res)
-			assert.Nil(t, res)
-		}
-	})
-
 	t.Run("successfully encodes the ID", func(t *testing.T) {
 		ids := []hashids.ID{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 		for _, id := range ids {

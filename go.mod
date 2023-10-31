@@ -1,4 +1,4 @@
-module github.com/indrasaputra/hashids
+module github.com/uncle-gua/hashids
 
 go 1.15
 
